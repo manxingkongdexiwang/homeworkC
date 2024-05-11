@@ -1,5 +1,5 @@
 #pragma once
-
+#define BodySize 40
 
 enum class Direction {
     UP,
@@ -13,13 +13,13 @@ public:
     Snake();
     ~Snake();
 
-    void Init(int row);
+    void Init();//≥ı ºªØ
     void Move(CPoint food);
-    bool CheckCollision() const;
-    void IsateFood(CPoint food, CPoint head);
+   // bool CheckCollision() const;
+    //void IsateFood(CPoint food, CPoint head);
     void SetDirection(Direction dir);
-    void AutoMoveToFood(CPoint food);
-    void Draw(CDC* pDC, COLORREF color);
+    //void AutoMoveToFood(CPoint food);
+    void Draw(CDC* pDC);
 
     vector<CPoint> GetBody() const;
 

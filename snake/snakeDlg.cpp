@@ -65,6 +65,8 @@ BEGIN_MESSAGE_MAP(CsnakeDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_COMMAND(ID_32771, &CsnakeDlg::OnStart)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -155,3 +157,65 @@ HCURSOR CsnakeDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CsnakeDlg::OnStart()
+{
+	// TODO: 在此添加命令处理程序代码
+	snake1.Init();
+
+
+
+	
+	SetTimer(1, 1000, NULL);//启动ID为1的定时器，定时时间为1s
+
+	DrawSnake();
+	CWnd* pWnd = GetDlgItem(IDC_GAMEAREA);//对话框指针
+	CDC* pDC = pWnd->GetDC();//绘图设备指针
+	snake1.Draw(pDC);
+
+}//点击开始菜单，就把蛇绘制在框中
+
+
+void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	snake1.Move();
+	DrawSnake();
+
+
+	CDialogEx::OnTimer(nIDEvent);
+}
+void CsnakeDlg::DrawSnake()
+{
+	CWnd* pWnd = GetDlgItem(IDC_GAMEAREA);//对话框指针
+	pWnd->Invalidate();//标记控件为无效
+	pWnd->UpdateWindow();//强制刷新控件
+	CDC* pDC = pWnd->GetDC();//绘图设备指针
+	snake1.Draw(pDC);
+}
+//定时器的响应函数
+
+
+BOOL CsnakeDlg::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		switch (pMsg->wParam) {
+		case VK_UP:
+			snake1.SetDirection(Direction::UP);
+			break;
+		case VK_DOWN:
+			snake1.SetDirection(Direction::DOWN);
+			break;
+		case VK_LEFT:
+			snake1.SetDirection(Direction::LEFT);
+			break;
+		case VK_RIGHT:
+			snake1.SetDirection(Direction::RIGHT);
+			break;
+		}
+	}
+	return CDialogEx::PreTranslateMessage(pMsg);
+}

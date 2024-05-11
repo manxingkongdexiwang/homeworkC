@@ -30,7 +30,3 @@ public:
 };
 
 extern CsnakeApp theApp;
-
-class Snake
-{
-};

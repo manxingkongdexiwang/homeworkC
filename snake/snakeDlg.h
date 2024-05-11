@@ -3,7 +3,8 @@
 //
 
 #pragma once
-
+#include"Gsnake.h"
+#include"snake.h"
 
 // CsnakeDlg 对话框
 class CsnakeDlg : public CDialogEx
@@ -31,4 +32,10 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnStart();
+	Snake snake1;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	void DrawSnake();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
