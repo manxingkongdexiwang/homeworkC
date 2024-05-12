@@ -72,6 +72,7 @@ BEGIN_MESSAGE_MAP(CsnakeDlg, CDialogEx)
 	ON_COMMAND(ID_32772, &CsnakeDlg::OnPause)
 	ON_COMMAND(ID_32773, &CsnakeDlg::OnContinue)
 	ON_COMMAND(ID_32775, &CsnakeDlg::OnExit)
+	ON_COMMAND(ID_32778, &CsnakeDlg::OnAuto)
 END_MESSAGE_MAP()
 
 
@@ -118,6 +119,8 @@ BOOL CsnakeDlg::OnInitDialog()
 
 	str.Format(TEXT("%d"), score);
 	m_score.SetWindowTextW(str);//显示分数
+
+	isAuto = false;//默认不自动游戏
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -188,8 +191,17 @@ void CsnakeDlg::OnStart()
 {
 	// TODO: 在此添加命令处理程序代码
 	snake1.Init();
+
 	score = 0;
 	difficulty = 1;
+
+	isAuto = false;
+	CString str;
+	str.Format(TEXT("%d"), difficulty);
+	m_difficulty.SetWindowTextW(str);//显示难度
+
+	str.Format(TEXT("%d"), score);
+	m_score.SetWindowTextW(str);//显示分数
 
 	SetTimer(1, 200, NULL);//启动ID为1的定时器，定时时间为1s
 	Food = GenerateFood(snake1.GetBody(), 20, 20);//生成食物
@@ -199,6 +211,7 @@ void CsnakeDlg::OnStart()
 void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (isAuto) snake1.AutoMoveToFood(Food);
 
 	snake1.Move(Food);
 	if (snake1.CheckCollision())//如果发生碰撞，游戏结束并提示
@@ -312,5 +325,12 @@ void CsnakeDlg::OnContinue()//继续
 void CsnakeDlg::OnExit()//退出
 {
 	exit(0);
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CsnakeDlg::OnAuto()
+{
+	isAuto = true;
 	// TODO: 在此添加命令处理程序代码
 }

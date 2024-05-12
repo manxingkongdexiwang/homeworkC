@@ -101,12 +101,43 @@ void Snake::SetDirection(Direction dir)
         (dir == Direction::RIGHT && currentDirection != Direction::LEFT)) {
         currentDirection = dir;
     }
-}//蛇不会朝向蛇头反向走
+}
+void Snake::AutoMoveToFood(CPoint food)//自动游戏函数
+{
+    int headX = body.front().x;
+    int headY = body.front().y;
+    int foodX = food.x;
+    int foodY = food.y;
+
+    if (headX < foodX && currentDirection != Direction::LEFT) {
+        currentDirection = Direction::RIGHT;
+    }
+    else if (headX > foodX && currentDirection != Direction::RIGHT) {
+        currentDirection = Direction::LEFT;
+    }
+    else if (headY < foodY && currentDirection != Direction::UP) {
+        currentDirection = Direction::DOWN;
+    }
+    else if (headY > foodY && currentDirection != Direction::DOWN)
+    {
+        currentDirection = Direction::UP;
+    }
+    else if (currentDirection != Direction::DOWN)
+    {
+        currentDirection = Direction::UP;
+    }
+    else
+    {
+        currentDirection = Direction::LEFT;
+    }
+}//GPT函数
+
+
 
 void Snake::Draw(CDC* pDC)
 {
 
-    CBrush brush(RGB(0, 255, 0)); // 使用绿色画刷绘制蛇身体
+    CBrush brush(RGB(0, 255, 0)); // 使用画刷绘制蛇身体
     for (CPoint& point : body) {
         int left = point.x * BodySize; // 每节身体的大小为BodySize*BodySize，计算绘制位置
         int top = point.y * BodySize;

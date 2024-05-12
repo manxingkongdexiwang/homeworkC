@@ -18,7 +18,7 @@ public:
     bool CheckCollision() const;//判断蛇有没有嘎掉
     void IsateFood(CPoint food, CPoint head);//判断是否吃到食物
     void SetDirection(Direction dir);
-    //void AutoMoveToFood(CPoint food);
+    void AutoMoveToFood(CPoint food);//自动游戏函数
     void Draw(CDC* pDC);//绘图函数
 
     vector<CPoint> GetBody() const;

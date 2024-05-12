@@ -48,4 +48,7 @@ public:
 	afx_msg void OnPause();
 	afx_msg void OnContinue();
 	afx_msg void OnExit();
+	afx_msg void OnAuto();
+
+	bool isAuto;
 };
