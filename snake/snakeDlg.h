@@ -40,5 +40,7 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);//键盘控制函数
 	CPoint Food;//食物生成函数
 	CPoint GenerateFood(vector<CPoint>& snakeBody, int maxX, int maxY);
-	void DrawFood();
+
+	int score;
+	int difficclty;
 };

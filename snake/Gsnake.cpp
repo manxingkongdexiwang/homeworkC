@@ -11,6 +11,7 @@ Snake::~Snake()
 
 void Snake::Init()
 {
+    ateFood = false;
 	currentDirection = Direction::RIGHT;//初始方向向右
 	body.push_back(CPoint(11,10));
 	body.push_back(CPoint(10, 10));
@@ -51,12 +52,43 @@ void Snake::Move(CPoint food)
     //判断是否吃到了食物
     //IsateFood(food, body.front());
 
-    //如果蛇没有吃到食物，移除尾部点以保持蛇的长度
-    //if (!ateFood) {
-    //    body.pop_back();
-   // }
+
+    IsateFood(food,body.front());//传入食物坐标和蛇头坐标
+    if (!ateFood) {
+       body.pop_back();
+    }//如果蛇没有吃到食物，移除尾部点以保持蛇的长度
 }
 
+bool Snake::CheckCollision() const
+{
+    // 获取蛇头当前位置
+    int x = body.front().x;
+    int y = body.front().y;
+
+    // 检查是否撞墙（超出绘图控件范围）
+    if (x < 0 || x >= 20 || y < 0 || y >= 20) {
+        return true;
+    }
+
+    // 检查是否撞到自己的身体
+    for (size_t i = 1; i < body.size(); ++i) {
+        if (body[i].x == x && body[i].y == y) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void Snake::IsateFood(CPoint food, CPoint head)//传入食物和蛇头坐标
+{
+    if (food == head)
+        ateFood = true;
+    else
+        ateFood = false;
+
+}
 
 void Snake::SetDirection(Direction dir)
 {

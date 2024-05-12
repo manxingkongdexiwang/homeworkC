@@ -13,13 +13,13 @@ public:
     Snake();
     ~Snake();
 
-    void Init();//初始化
-    void Move(CPoint food);
-   // bool CheckCollision() const;
-    //void IsateFood(CPoint food, CPoint head);
+    void Init();//初始化蛇
+    void Move(CPoint food);//移动函数
+    bool CheckCollision() const;//判断蛇有没有嘎掉
+    void IsateFood(CPoint food, CPoint head);//判断是否吃到食物
     void SetDirection(Direction dir);
     //void AutoMoveToFood(CPoint food);
-    void Draw(CDC* pDC);
+    void Draw(CDC* pDC);//绘图函数
 
     vector<CPoint> GetBody() const;
 
