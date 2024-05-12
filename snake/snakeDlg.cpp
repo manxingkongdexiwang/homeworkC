@@ -168,6 +168,7 @@ void CsnakeDlg::OnStart()
 
 	
 	SetTimer(1, 1000, NULL);//启动ID为1的定时器，定时时间为1s
+	Food = GenerateFood(snake1.GetBody(), 20, 20);
 
 	DrawSnake();
 	CWnd* pWnd = GetDlgItem(IDC_GAMEAREA);//对话框指针
@@ -180,8 +181,9 @@ void CsnakeDlg::OnStart()
 void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	snake1.Move();
+	snake1.Move(Food);
 	DrawSnake();
+	DrawFood();
 
 
 	CDialogEx::OnTimer(nIDEvent);
@@ -216,6 +218,45 @@ BOOL CsnakeDlg::PreTranslateMessage(MSG* pMsg)
 			snake1.SetDirection(Direction::RIGHT);
 			break;
 		}
-	}
+	}//判断按键来改变蛇的方向
 	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+CPoint CsnakeDlg::GenerateFood(vector<CPoint>& snakeBody, int maxX, int maxY)
+{
+
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<int> xDist(0, maxX - 1); // 食物的 x 坐标范围
+	uniform_int_distribution<int> yDist(0, maxY - 1); // 食物的 y 坐标范围
+
+	int foodX, foodY;
+	do {
+		// 随机生成食物坐标
+		foodX = xDist(gen);
+		foodY = yDist(gen);
+		// 检查生成的食物是否在蛇的身体上，如果是，重新生成
+	} while (any_of(snakeBody.begin(), snakeBody.end(), [&](const CPoint& p) {
+		return p.x == foodX && p.y == foodY;
+		}));
+
+	return CPoint(foodX, foodY);
+}
+
+void CsnakeDlg::DrawFood()
+{
+	CWnd* pWnd = GetDlgItem(IDC_GAMEAREA);//对话框指针
+	pWnd->Invalidate();//标记控件为无效
+	pWnd->UpdateWindow();//强制刷新控件
+	CDC* pDC = pWnd->GetDC();//绘图设备指针
+
+	CBrush brush(RGB(0, 0, 255)); // 使用画刷绘制食物
+	int left = Food.x * BodySize; // 食物的大小为BodySize*BodySize，计算绘制位置
+	int top = Food.y * BodySize;
+	int right = left + BodySize;
+	int bottom = top + BodySize;
+	pDC->SelectObject(&brush);
+	pDC->Rectangle(left, top, right, bottom); // 绘制食物
+
+	ReleaseDC(pDC);
 }

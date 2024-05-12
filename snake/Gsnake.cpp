@@ -49,12 +49,12 @@ void Snake::Move(CPoint food)
     body.insert(body.begin(), CPoint(headX, headY));
 
     //判断是否吃到了食物
-    IsateFood(food, body.front());
+    //IsateFood(food, body.front());
 
     //如果蛇没有吃到食物，移除尾部点以保持蛇的长度
-    if (!ateFood) {
-        body.pop_back();
-    }
+    //if (!ateFood) {
+    //    body.pop_back();
+   // }
 }
 
 
@@ -81,4 +81,9 @@ void Snake::Draw(CDC* pDC)
         pDC->SelectObject(&brush);
         pDC->Rectangle(left, top, right, bottom); // 绘制蛇身体的一个节
     }
+}
+
+vector<CPoint> Snake::GetBody() const
+{
+    return body;
 }

@@ -34,8 +34,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnStart();
-	Snake snake1;
+	Snake snake1;//单人玩家蛇类
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	void DrawSnake();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);//键盘控制函数
+	CPoint Food;//食物生成函数
+	CPoint GenerateFood(vector<CPoint>& snakeBody, int maxX, int maxY);
+	void DrawFood();
 };
