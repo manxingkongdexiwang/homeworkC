@@ -69,6 +69,9 @@ BEGIN_MESSAGE_MAP(CsnakeDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_COMMAND(ID_32771, &CsnakeDlg::OnStart)
 	ON_WM_TIMER()
+	ON_COMMAND(ID_32772, &CsnakeDlg::OnPause)
+	ON_COMMAND(ID_32773, &CsnakeDlg::OnContinue)
+	ON_COMMAND(ID_32775, &CsnakeDlg::OnExit)
 END_MESSAGE_MAP()
 
 
@@ -156,7 +159,19 @@ void CsnakeDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+		//CDialogEx::OnPaint();
+		CPaintDC   dc(this); // 创建一个绘图设备上下文
+		CRect rect; // 定义客户区域矩形
+		GetClientRect(&rect); // 获取对话框客户区域大小
+		CDC   dcMem; // 定义内存设备上下文
+		dcMem.CreateCompatibleDC(&dc); // 创建与当前设备兼容的内存设备上下文
+		CBitmap   bmpBackground; // 定义背景图片位图对象
+		bmpBackground.LoadBitmap(IDB_BITMAP1);  // 加载对话框的背景图片资源
+		BITMAP   bitmap; // 定义位图参数结构体
+		bmpBackground.GetBitmap(&bitmap); // 获取位图信息
+		CBitmap* pbmpOld = dcMem.SelectObject(&bmpBackground); // 将bmpBackground对象选入内存设备上下文
+		dc.StretchBlt(0, 0, rect.Width(), rect.Height(), &dcMem, 0, 0, bitmap.bmWidth, bitmap.bmHeight, SRCCOPY);
+		// 在窗口客户区域中展示背景图片，StretchBlt函数是将指定坐标处的矩形区域的内容进行拉伸后显示
 	}
 }
 
@@ -173,6 +188,8 @@ void CsnakeDlg::OnStart()
 {
 	// TODO: 在此添加命令处理程序代码
 	snake1.Init();
+	score = 0;
+	difficulty = 1;
 
 	SetTimer(1, 200, NULL);//启动ID为1的定时器，定时时间为1s
 	Food = GenerateFood(snake1.GetBody(), 20, 20);//生成食物
@@ -275,4 +292,25 @@ CPoint CsnakeDlg::GenerateFood(vector<CPoint>& snakeBody, int maxX, int maxY)
 		}));
 
 	return CPoint(foodX, foodY);
+}
+
+
+void CsnakeDlg::OnPause()//暂停
+{
+	KillTimer(1);
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CsnakeDlg::OnContinue()//继续
+{
+	SetTimer(1, 200 - difficulty * 6, NULL);
+	// TODO: 在此添加命令处理程序代码
+}
+
+
+void CsnakeDlg::OnExit()//退出
+{
+	exit(0);
+	// TODO: 在此添加命令处理程序代码
 }

@@ -17,6 +17,7 @@ void Snake::Init()
 	body.push_back(CPoint(11,10));
 	body.push_back(CPoint(10, 10));
 	body.push_back(CPoint(9, 10));//蛇最初的三节
+
 }
 
 void Snake::Move(CPoint food)

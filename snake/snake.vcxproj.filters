@@ -65,5 +65,11 @@
     <Image Include="res\snake.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\99ba9d7a56c944bdba1030fb3399aa89 (1).bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

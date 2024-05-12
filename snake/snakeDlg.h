@@ -45,4 +45,7 @@ public:
 	int difficulty;//难度
 	CEdit m_difficulty;
 	CEdit m_score;
+	afx_msg void OnPause();
+	afx_msg void OnContinue();
+	afx_msg void OnExit();
 };
