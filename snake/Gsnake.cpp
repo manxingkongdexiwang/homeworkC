@@ -13,6 +13,7 @@ void Snake::Init()
 {
     ateFood = false;
 	currentDirection = Direction::RIGHT;//初始方向向右
+    body.clear();//清空，以防再次开始时直接结束
 	body.push_back(CPoint(11,10));
 	body.push_back(CPoint(10, 10));
 	body.push_back(CPoint(9, 10));//蛇最初的三节

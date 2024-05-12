@@ -59,6 +59,8 @@ CsnakeDlg::CsnakeDlg(CWnd* pParent /*=nullptr*/)
 void CsnakeDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_difficulty);
+	DDX_Control(pDX, IDC_EDIT2, m_score);
 }
 
 BEGIN_MESSAGE_MAP(CsnakeDlg, CDialogEx)
@@ -105,6 +107,14 @@ BOOL CsnakeDlg::OnInitDialog()
 	CWnd* pWnd;
 	pWnd = GetDlgItem(IDC_GAMEAREA);
 	pWnd->SetWindowPos(NULL, 0, 0, 800, 800, SWP_NOZORDER | SWP_NOMOVE);    //把编辑控件的大小设为(100,80)
+	score=0;//分数
+    difficulty=1;//难度
+	CString str;
+	str.Format(TEXT("%d"), difficulty);
+	m_difficulty.SetWindowTextW(str);//显示难度
+
+	str.Format(TEXT("%d"), score);
+	m_score.SetWindowTextW(str);//显示分数
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -174,16 +184,28 @@ void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
 	snake1.Move(Food);
-	if (snake1.CheckCollision())
+	if (snake1.CheckCollision())//如果发生碰撞，游戏结束并提示
 	{
 		KillTimer(1);
 		MessageBox(TEXT("小蛇嘎掉了"),TEXT("提示"));
 		return;
 	}
-	if (snake1.ateFood) {
+	if (snake1.ateFood)//如果吃到食物，继续生成食物,分数难度对应增加
+	{
 		Food = GenerateFood(snake1.GetBody(), 20, 20);//生成食物
 		snake1.ateFood = false;
-	}//如果吃到食物，继续生成食物
+		score++;
+		difficulty++;
+
+		SetTimer(1, 200-difficulty*6, NULL);//难度增加移动加快
+
+		CString str;
+		str.Format(TEXT("%d"), difficulty);
+		m_difficulty.SetWindowTextW(str);//显示难度
+
+		str.Format(TEXT("%d"), score);
+		m_score.SetWindowTextW(str);//显示分数
+	}
 	DrawSnake();
 
 

@@ -41,6 +41,8 @@ public:
 	CPoint Food;//食物生成函数
 	CPoint GenerateFood(vector<CPoint>& snakeBody, int maxX, int maxY);
 
-	int score;
-	int difficclty;
+	int score;//分数
+	int difficulty;//难度
+	CEdit m_difficulty;
+	CEdit m_score;
 };
