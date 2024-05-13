@@ -51,4 +51,5 @@ public:
 	afx_msg void OnAuto();
 
 	bool isAuto;
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

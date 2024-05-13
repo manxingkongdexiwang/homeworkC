@@ -31,6 +31,8 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -43,6 +45,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -73,6 +76,7 @@ BEGIN_MESSAGE_MAP(CsnakeDlg, CDialogEx)
 	ON_COMMAND(ID_32773, &CsnakeDlg::OnContinue)
 	ON_COMMAND(ID_32775, &CsnakeDlg::OnExit)
 	ON_COMMAND(ID_32778, &CsnakeDlg::OnAuto)
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -121,6 +125,8 @@ BOOL CsnakeDlg::OnInitDialog()
 	m_score.SetWindowTextW(str);//显示分数
 
 	isAuto = false;//默认不自动游戏
+
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -169,7 +175,7 @@ void CsnakeDlg::OnPaint()
 		CDC   dcMem; // 定义内存设备上下文
 		dcMem.CreateCompatibleDC(&dc); // 创建与当前设备兼容的内存设备上下文
 		CBitmap   bmpBackground; // 定义背景图片位图对象
-		bmpBackground.LoadBitmap(IDB_BITMAP1);  // 加载对话框的背景图片资源
+		bmpBackground.LoadBitmap(IDB_BITMAP4);  // 加载对话框的背景图片资源
 		BITMAP   bitmap; // 定义位图参数结构体
 		bmpBackground.GetBitmap(&bitmap); // 获取位图信息
 		CBitmap* pbmpOld = dcMem.SelectObject(&bmpBackground); // 将bmpBackground对象选入内存设备上下文
@@ -217,7 +223,7 @@ void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 	if (snake1.CheckCollision())//如果发生碰撞，游戏结束并提示
 	{
 		KillTimer(1);
-		MessageBox(TEXT("小蛇嘎掉了"),TEXT("提示"));
+		MessageBox(TEXT("大蛇丸嘎掉了"), TEXT("提示"));
 		return;
 	}
 	if (snake1.ateFood)//如果吃到食物，继续生成食物,分数难度对应增加
@@ -227,7 +233,7 @@ void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 		score++;
 		difficulty++;
 
-		SetTimer(1, 200-difficulty*6, NULL);//难度增加移动加快
+		SetTimer(1, 200 - difficulty * 6, NULL);//难度增加移动加快
 
 		CString str;
 		str.Format(TEXT("%d"), difficulty);
@@ -236,8 +242,27 @@ void CsnakeDlg::OnTimer(UINT_PTR nIDEvent)
 		str.Format(TEXT("%d"), score);
 		m_score.SetWindowTextW(str);//显示分数
 	}
+
+	// 获取游戏区域控件
+	CWnd* pGameArea = GetDlgItem(IDC_GAMEAREA);
+	if (pGameArea == NULL) return;
+
+	// 无效并更新游戏区域，准备重绘
+	pGameArea->Invalidate();
+	pGameArea->UpdateWindow();
+
+	// 获取游戏区域的设备上下文
+	CDC* pDC = pGameArea->GetDC();
+	if (pDC == NULL) return;
+
+	// 设置背景模式为透明
+	pDC->SetBkMode(TRANSPARENT);
+
+	// 绘制蛇和食物
 	DrawSnake();
 
+	// 释放设备上下文
+	pGameArea->ReleaseDC(pDC);
 
 	CDialogEx::OnTimer(nIDEvent);
 }
@@ -249,8 +274,9 @@ void CsnakeDlg::DrawSnake()
 	pWnd->UpdateWindow();//强制刷新控件
 	CDC* pDC = pWnd->GetDC();//绘图设备指针
 
-	snake1.Draw(pDC);
+	pDC->SetBkMode(TRANSPARENT);
 
+	snake1.Draw(pDC);
 	CBrush brush(RGB(100, 30, 255)); // 使用画刷绘制食物
 	int left = Food.x * BodySize; // 食物的大小为BodySize*BodySize，计算绘制位置
 	int top = Food.y * BodySize;
@@ -333,4 +359,32 @@ void CsnakeDlg::OnAuto()
 {
 	isAuto = true;
 	// TODO: 在此添加命令处理程序代码
+}
+
+
+HBRUSH CAboutDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  在此更改 DC 的任何特性
+
+	// TODO:  如果默认的不是所需画笔，则返回另一个画笔
+	return hbr;
+}
+
+
+HBRUSH CsnakeDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	static HBRUSH hBrushTransparent = CreateSolidBrush(RGB(0, 0, 0)); // 创建一个静态的透明画刷
+	static BOOL bInitialized = FALSE; // 静态变量，用于标识画刷是否已初始化
+
+	if (nCtlColor == CTLCOLOR_STATIC)
+	{
+		// 设置设备上下文的背景模式为透明
+		pDC->SetBkMode(TRANSPARENT);
+		// 返回NULL_BRUSH，这样控件的背景就会是透明的
+		//return (HBRUSH)GetStockObject(NULL_BRUSH);
+	}
+	// 对于其他类型的控件，使用默认的颜色
+	return CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 }

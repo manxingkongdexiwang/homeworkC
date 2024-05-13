@@ -10,6 +10,8 @@
 #define IDR_MENU1                       130
 #define IDB_BITMAP1                     131
 #define IDB_BITMAP2                     132
+#define IDB_BITMAP3                     133
+#define IDB_BITMAP4                     134
 #define IDC_GAMEAREA                    1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
@@ -26,7 +28,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
+#define _APS_NEXT_RESOURCE_VALUE        135
 #define _APS_NEXT_COMMAND_VALUE         32779
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           101

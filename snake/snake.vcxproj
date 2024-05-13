@@ -210,6 +210,8 @@
     <None Include="res\snake.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\1.bmp" />
+    <Image Include="res\2.bmp" />
     <Image Include="res\99ba9d7a56c944bdba1030fb3399aa89 (1).bmp" />
     <Image Include="res\bitmap2.bmp" />
     <Image Include="res\snake.ico" />
